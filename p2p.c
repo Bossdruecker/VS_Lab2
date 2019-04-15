@@ -17,6 +17,43 @@ void sendingmsg(int socked, chat_message *point_msg)
     }
 }
 
+//return 0 wenn es funktioniert hat return -1 Fehler
+int addPeer(struct sockaddr_in addr)
+{
+    last_peer->nextUser = malloc(sizeof(ipLinkedList));
+    last_peer = last_peer->nextUser;
+    if (last_peer != NULL)
+    {
+        last_peer->user.sin_family = addr.sin_family;
+        last_peer->user.sin_port = addr.sin_port;
+        last_peer->user.sin_addr.s_addr = addr.sin_addr.s_addr;
+        last_peer->nextUser = NULL;
+    }
+    else
+    {
+        perror("Fehler bei allokieren von Speicher für head");
+        return -1;
+    }
+    return 0;
+}
+
+//return 0 wenn es funktioniert hat return -1 Fehler
+void deletePeer(struct sockaddr_in addr)
+{
+    ipLinkedList *peer, *delete_peer;
+    peer = head;
+    while (peer->nextUser != NULL)
+    {
+        if(peer->nextUser->user.sin_port == addr.sin_port)
+        {
+            delete_peer = peer->nextUser;
+            peer->nextUser = peer->nextUser->nextUser;
+            free(delete_peer);
+        }
+        peer = peer->nextUser;
+    }
+}
+
 int main()
 {
     int exit_chat = 1;
@@ -177,18 +214,20 @@ int main()
                     printf("%s tritt dem Chat bei!\n", point_msg->nickname);
                     break;
                 case EXT:
-                    current_peer = head;
-                    while (current_peer->nextUser != NULL)
-                    {
-                        if (current_peer->nextUser->user.sin_port == addr.sin_port)
-                        {
-                            delete_peer = current_peer->nextUser;
-                            current_peer->nextUser = current_peer->nextUser->nextUser;
-                            free(delete_peer);
-                            printf("%s hat den Chat verlassen\n", point_msg->nickname);
-                            break;
-                        }
-                    }
+                    deletePeer(addr);
+                    printf("%s hat den Chat verlassen\n", point_msg->nickname);
+                    // current_peer = head;
+                    // while (current_peer->nextUser != NULL)
+                    // {
+                    //     if (current_peer->nextUser->user.sin_port == addr.sin_port)
+                    //     {
+                    //         delete_peer = current_peer->nextUser;
+                    //         current_peer->nextUser = current_peer->nextUser->nextUser;
+                    //         free(delete_peer);
+                    //         printf("%s hat den Chat verlassen\n", point_msg->nickname);
+                    //         break;
+                    //     }
+                    // }
                     break;
                 case CON_PEER_NET:
                     //point_msg auf send buffer
