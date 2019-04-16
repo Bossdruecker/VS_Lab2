@@ -44,13 +44,23 @@ void deletePeer(struct sockaddr_in addr)
     peer = head;
     while (peer->nextUser != NULL)
     {
-        if(peer->nextUser->user.sin_port == addr.sin_port)
+        if (peer->nextUser->user.sin_port == addr.sin_port)
         {
             delete_peer = peer->nextUser;
-            peer->nextUser = peer->nextUser->nextUser;
+            if (peer->nextUser->nextUser != NULL)
+            {
+                peer->nextUser = peer->nextUser->nextUser;
+            }
+            else
+            {
+                peer->nextUser = NULL;
+            }
             free(delete_peer);
         }
-        peer = peer->nextUser;
+        if (peer->nextUser != NULL)
+        {
+            peer = peer->nextUser;
+        }
     }
 }
 
