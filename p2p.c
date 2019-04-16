@@ -254,6 +254,10 @@ int main()
                     sendingmsg(socket_fd, point_msg);
                     strcpy(point_msg->nickname, nick);
 
+                    //Connect zurück zum Anfragendem Peer
+                    point_msg->msg_command = CON;
+                    sendto(socket_fd, (void *)point_msg, sizeof(chat_message), 0, (struct sockaddr *)&addr, sizeof(struct sockaddr_in));
+
                     //point_msg auf recieve buffer
                     point_msg = &recv_msg;
 
