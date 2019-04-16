@@ -18,24 +18,24 @@ void sendingmsg(int socked, chat_message *point_msg)
 }
 
 //return 0 wenn es funktioniert hat return -1 Fehler
-int addPeer(struct sockaddr_in addr)
-{
-    last_peer->nextUser = malloc(sizeof(ipLinkedList));
-    last_peer = last_peer->nextUser;
-    if (last_peer != NULL)
-    {
-        last_peer->user.sin_family = addr.sin_family;
-        last_peer->user.sin_port = addr.sin_port;
-        last_peer->user.sin_addr.s_addr = addr.sin_addr.s_addr;
-        last_peer->nextUser = NULL;
-    }
-    else
-    {
-        perror("Fehler bei allokieren von Speicher für head");
-        return -1;
-    }
-    return 0;
-}
+// int addPeer(struct sockaddr_in addr)
+// {
+//     last_peer->nextUser = malloc(sizeof(ipLinkedList));
+//     last_peer = last_peer->nextUser;
+//     if (last_peer != NULL)
+//     {
+//         last_peer->user.sin_family = addr.sin_family;
+//         last_peer->user.sin_port = addr.sin_port;
+//         last_peer->user.sin_addr.s_addr = addr.sin_addr.s_addr;
+//         last_peer->nextUser = NULL;
+//     }
+//     else
+//     {
+//         perror("Fehler bei allokieren von Speicher für head");
+//         return -1;
+//     }
+//     return 0;
+// }
 
 //return 0 wenn es funktioniert hat return -1 Fehler
 void deletePeer(struct sockaddr_in addr)
