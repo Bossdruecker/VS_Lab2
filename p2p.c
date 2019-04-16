@@ -5,6 +5,7 @@ chat_message send_msg, recv_msg, *point_msg;
 
 void sendingmsg(int socked, chat_message *point_msg)
 {
+    point_msg = &send_msg;
     struct sockaddr_in addr_send;
     current_peer = head;
     while (current_peer->nextUser != NULL)
@@ -67,7 +68,7 @@ void deletePeer(struct sockaddr_in addr)
 int main()
 {
     int exit_chat = 1;
-
+    char nick[25];
     char buf[256];
     struct sockaddr_in addr, otheraddr;
 
@@ -153,7 +154,8 @@ int main()
 
     point_msg = &send_msg;
     printf("Geben Sie bitte ihren Nickname ein: ");
-    fscanf(stdin, "%s", point_msg->nickname);
+    fscanf(stdin, "%s", nick);
+    strcpy(point_msg->nickname, nick);
 
     if (input > 0)
     {
@@ -250,6 +252,7 @@ int main()
 
                     //Nachricht an alle Peers mit IP von neuem Peer
                     sendingmsg(socket_fd, point_msg);
+                    strcpy(point_msg->nickname, nick);
 
                     //point_msg auf recieve buffer
                     point_msg = &recv_msg;
