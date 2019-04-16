@@ -303,7 +303,7 @@ int main()
                         //point_msg auf send buffer
                         point_msg = &send_msg;
                         point_msg->msg_command = ADD_ME;
-                        strcpy(point_msg->nachricht, "Ciao");
+                        strcpy(point_msg->nachricht, "Ciao");   //um leere ADD_ME Nachrichten abzufangen
                         sendto(socket_fd, (void *)point_msg, sizeof(chat_message), 0, (struct sockaddr *)&otheraddr, sizeof(struct sockaddr_in));
                     }
 
